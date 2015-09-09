@@ -5,7 +5,7 @@ Fluent parser plugin for Elasticsearch slow query log file.
 ##Installation
 
 ```shell
-$ gem install fluent-plugin-esslowquery
+$ td-agent-gem install fluent-plugin-esslowquery
 ```
 
 ##How to use
