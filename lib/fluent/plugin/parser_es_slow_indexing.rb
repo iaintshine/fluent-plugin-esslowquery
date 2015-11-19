@@ -1,9 +1,9 @@
 module Fluent
-  class ElasticsearchSlowQueryLogParser < Parser
-    REGEXP = /^\[(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\]\[(?<severity>[a-zA-Z]+\s*)\]\[(?<source>\S+)\] \[(?<node>\S+)\] \[(?<index>\w+)\]\[(?<shard>\d+)\] took\[(?<took>.+)\], took_millis\[(?<took_millis>\d+)\], types\[(?<types>.*)\], stats\[(?<stats>.*)\], search_type\[(?<search_type>.*)\], total_shards\[(?<total_shards>\d+)\], source\[(?<source_body>.*)\], extra_source\[(?<extra_source>.*)\]/
+  class ElasticsearchSlowIndexingLogParser < Parser
+    REGEXP = /^\[(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\]\[(?<severity>[a-zA-Z\s]+)\]\[(?<source>\S+)\] \[(?<node>\S+)\] \[(?<index>\w+)\]\[(?<shard>\d+)\] took\[(?<took>.+)\], took_millis\[(?<took_millis>\d+)\], type\[(?<type>.+)\], id\[(?<indexing_id>.*)\], routing\[(?<routing>.*)\], source\[(?<source_body>.*)\]/
     TIME_FORMAT = "%Y-%m-%d %H:%M:%S,%N"
 
-    Plugin.register_parser("es_slow_query", self)
+    Plugin.register_parser("es_slow_indexing", self)
 
     def initialize
       super
@@ -28,7 +28,8 @@ module Fluent
 
       shard = m['shard'].to_i
       took_millis = m['took_millis'].to_i
-      total_shards = m['total_shards'].to_i
+      indexing_id= m['indexing_id'].to_i
+      routing = m['routing'].to_i
 
       time = m['time']
       time = @mutex.synchronize { @time_parser.parse(time) }
@@ -41,12 +42,10 @@ module Fluent
         'shard' => shard,
         'took' => m['took'],
         'took_millis' => took_millis,
-        'types' => m['types'],
-        'stats' => m['stats'],
-        'search_type' => m['search_type'],
-        'total_shards' => total_shards,
-        'source_body' => m['source_body'],
-        'extra_source' => m['extra_source']
+        'type' => m['type'],
+        'indexing_id' => indexing_id,
+        'routing' => routing,
+        'source_body' => m['source_body']
       }
       record["time"] = m['time'] if @keep_time_key
 
