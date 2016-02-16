@@ -1,7 +1,7 @@
 module Fluent
   class TextParser
     class ElasticsearchSlowIndexingLogParser < Parser
-      REGEXP = /^\[(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\]\[(?<severity>[a-zA-Z\s]+)\]\[(?<source>\S+)\] \[(?<node>\S+)\] \[(?<index>\w+)\]\[(?<shard>\d+)\] took\[(?<took>.+)\], took_millis\[(?<took_millis>\d+)\], type\[(?<type>.+)\], id\[(?<indexing_id>.*)\], routing\[(?<routing>.*)\], source\[(?<source_body>.*)\]/
+      REGEXP = /^\[(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\]\[(?<severity>[a-zA-Z]+\s*)\]\[(?<source>\S+)\] \[(?<node>\S+)\] \[(?<index>\w+)\]\[(?<shard>\d+)\] took\[(?<took>.+)\], took_millis\[(?<took_millis>\d+)\], type\[(?<type>.+)\], id\[(?<indexing_id>.*)\], routing\[(?<routing>.*)\], source\[(?<source_body>.*)\]/
       TIME_FORMAT = "%Y-%m-%d %H:%M:%S,%N"
 
       Plugin.register_parser("es_slow_indexing", self)
