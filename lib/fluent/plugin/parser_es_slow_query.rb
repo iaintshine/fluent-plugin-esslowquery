@@ -1,5 +1,5 @@
 module Fluent
-  class ElasticsearchSlowLogParser < Parser
+  class ElasticsearchSlowQueryLogParser < Parser
     REGEXP = /^\[(?<time>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3})\]\[(?<severity>[a-zA-Z]+\s*)\]\[(?<source>\S+)\] \[(?<node>\S+)\] \[(?<index>\w+)\]\[(?<shard>\d+)\] took\[(?<took>.+)\], took_millis\[(?<took_millis>\d+)\], types\[(?<types>.*)\], stats\[(?<stats>.*)\], search_type\[(?<search_type>.*)\], total_shards\[(?<total_shards>\d+)\], source\[(?<source_body>.*)\], extra_source\[(?<extra_source>.*)\]/
     TIME_FORMAT = "%Y-%m-%d %H:%M:%S,%N"
 
